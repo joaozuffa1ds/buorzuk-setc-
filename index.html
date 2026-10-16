@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#0b0a12">
+<title>Virus Waves 2D</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <canvas id="game"></canvas>
+
+  <!-- ============ HUD ============ -->
+  <div id="hud" class="hidden">
+    <div id="joy"><div id="joyBase"><div id="joyKnob"></div></div></div>
+    <div class="hud-top">
+      <div class="hud-left">
+        <div class="bar hp"><i id="hpFill"></i><span id="hpText">100/100</span></div>
+        <div class="bar xp"><i id="xpFill"></i><span id="xpText">0/10</span></div>
+      </div>
+      <div class="hud-center">
+        <div id="timer">00:00</div>
+        <div id="waveInfo">FASE 1 · SALA 1/8</div>
+        <div id="worldInfo" class="hidden"></div>
+      </div>
+      <div class="hud-right">
+        <div class="stat"><b>⚔</b><span id="kills">0</span></div>
+        <div class="stat"><b>🪙</b><span id="money">0</span></div>
+        <div class="stat"><b>💎</b><span id="gems">0</span></div>
+        <button id="btnPause" class="mini-btn">II</button>
+      </div>
+    </div>
+
+    <div id="weaponsBar"></div>
+    <div id="relicBar"></div>
+
+    <div id="chestPrompt" class="hidden">
+      <b>📦 BAÚ</b> <span id="chestCost">30 moedas</span>
+      <button id="btnOpenChest">ABRIR</button>
+    </div>
+
+    <div id="fusionBanner" class="hidden">🔮 FUSÃO DISPONÍVEL — SUBIU DE NÍVEL!</div>
+    <div id="roomBanner" class="hidden"></div>
+    <div id="bossBar" class="hidden"><i id="bossFill"></i><span id="bossName">BOSS</span></div>
+
+    <div id="touchHint" class="hidden">arraste na esquerda para mover • toque à direita no baú • ataque é automático</div>
+  </div>
+
+  <!-- ============ MENU ============ -->
+  <section id="menu" class="screen">
+    <h1 class="title">VIRUS<span>WAVES</span> <em>2D</em></h1>
+    <p class="creator">Joao Leno</p>
+    <p class="subtitle">Sobreviva às hordas · evolua · funda armas · acumule gemas</p>
+
+    <div class="modes" id="modeList"></div>
+
+    <div id="worldPanel" class="world-panel hidden"></div>
+
+    <div class="menu-build" id="menuBuild"></div>
+
+    <details class="codex">
+      <summary>📖 Armas, fusões, relíquias e personagens (clique para ver)</summary>
+      <h3>🗡️ Armas — cada personagem destrava uma a mais</h3>
+      <div id="codexWeapons" class="cx-grid"></div>
+      <h3>🔮 Fusões — as 2 armas precisam chegar no nível 3</h3>
+      <div id="codexFusions" class="cx-grid"></div>
+      <h3>✨ Relíquias — ache o pedestal dentro das salas (5% SETEC, ~34% nas outras)</h3>
+      <div id="codexRelics" class="relic-grid"></div>
+      <h3>🧙 Personagens</h3>
+      <div id="codexChars" class="cx-grid"></div>
+    </details>
+
+    <div class="codebox" id="codeBox">
+      <label for="codeInput">🔑 CÓDIGO</label>
+      <div class="code-row">
+        <input id="codeInput" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"
+               maxlength="24" placeholder="digite o código e aperte Enter">
+        <button id="btnCode" class="mini-btn code-go">OK</button>
+      </div>
+    </div>
+
+    <button id="btnPlay" class="big-btn">▶ JOGAR</button>
+    <button id="btnSkins" class="big-btn alt">🧑‍🎨 SKINS</button>
+    <button id="btnChars" class="big-btn alt">🧙 PERSONAGENS</button>
+    <button id="btnShop" class="big-btn alt">💎 LOJA</button>
+    <p class="hint">Mover: <b>WASD</b>/<b>Setas</b> · Pausa: <b>P</b> · Abrir baú: <b>E</b> ou encoste nele · Escolha de level-up: <b>1-4</b> — o ataque é automático<br>Limpe a sala e ande na <b>SAÍDA</b> para ir pra próxima sala. A sala de trás é apagada.<br>Pegue as <b>relíquias</b> no pedestal com a coluna de luz — elas valem a partida toda.</p>
+  </section>
+
+  <!-- ============ SKINS ============ -->
+  <section id="skins" class="screen hidden">
+    <h2>🧑‍🎨 SKINS <small id="skinsGems">0</small> 💎</h2>
+    <p class="subtitle">A skin é a aparência do seu personagem. Cada personagem comprado traz a skin dele de graça; as extras se compram com gemas. Algumas dão um bônus.</p>
+    <div class="skin-grid" id="skinGrid"></div>
+    <button id="btnSkinsBack" class="big-btn">◀ VOLTAR</button>
+  </section>
+
+  <!-- ============ LOJA ============ -->
+  <section id="shop" class="screen hidden">
+    <h2>💎 LOJA DE GEMAS <small id="shopGems">0</small></h2>
+    <p class="subtitle">Melhorias permanentes (valem só nesta sessão)</p>
+    <div class="shop-grid" id="shopGrid"></div>
+    <button id="btnChars2" class="big-btn alt">🧙 PERSONAGENS</button>
+    <button id="btnShopBack" class="big-btn">◀ VOLTAR</button>
+  </section>
+
+  <!-- ============ PERSONAGENS ============ -->
+  <section id="chars" class="screen hidden">
+    <h2>🧙 PERSONAGENS <small id="charsGems">0</small> 💎</h2>
+    <p class="subtitle">Jogando, você <b>destrava</b> personagens. Depois é só <b>comprar</b> com gemas para usar. Cada personagem destrava <b>uma arma</b> a mais para a partida.</p>
+    <div class="char-grid" id="charGrid"></div>
+    <button id="btnCharsBack" class="big-btn">◀ VOLTAR</button>
+  </section>
+
+  <!-- ============ LEVEL UP ============ -->
+  <section id="levelup" class="screen hidden overlay">
+    <h2 class="lv-title">SUBIU DE NÍVEL! <small id="lvNum">2</small></h2>
+    <p class="subtitle">Escolha 1 melhoria</p>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <!-- ============ PAUSA ============ -->
+  <section id="pause" class="screen hidden overlay">
+    <h2>PAUSADO</h2>
+    <div class="pause-stats" id="pauseStats"></div>
+    <button id="btnResume" class="big-btn">▶ CONTINUAR</button>
+    <button id="btnQuit" class="big-btn alt">✖ ABANDONAR</button>
+  </section>
+
+  <!-- ============ FIM DE PARTIDA ============ -->
+  <section id="gameover" class="screen hidden overlay">
+    <h2 id="overTitle">VOCÊ MORREU</h2>
+    <p class="subtitle" id="overMode">Modo Infinito</p>
+    <div class="results" id="results"></div>
+    <div class="gained" id="gained">💎 +0 gemas</div>
+    <button id="btnShop2" class="big-btn">💎 GASTAR GEMAS</button>
+    <button id="btnMenu" class="big-btn alt">◀ MENU</button>
+  </section>
+
+  <div id="toast"></div>
+</div>
+
+<script src="js/utils.js"></script>
+<script src="js/data.js"></script>
+<script src="js/save.js"></script>
+<script src="js/chars.js"></script>
+<script src="js/input.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/sprites.js"></script>
+<script src="js/entities.js"></script>
+<script src="js/mechanics.js"></script>
+<script src="js/game.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
