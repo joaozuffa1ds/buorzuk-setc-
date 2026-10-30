@@ -47,13 +47,36 @@
     <div id="touchHint" class="hidden">arraste na esquerda para mover • toque à direita no baú • ataque é automático</div>
   </div>
 
+  <!-- ============ TUTORIAL OVERLAY (dentro do jogo) ============ -->
+  <div id="tutOverlay" class="hidden">
+    <div class="tut-box">
+      <div class="tut-step">ETAPA <span id="tutNum">1</span>/3</div>
+      <h3 id="tutTit">Mova-se</h3>
+      <p id="tutTxt">Use <b>WASD</b> ou as <b>setas</b> para andar pelo mapa.</p>
+      <button id="btnTutNext" class="big-btn">PRÓXIMO</button>
+    </div>
+  </div>
+
   <!-- ============ MENU ============ -->
   <section id="menu" class="screen">
-    <h1 class="title">VIRUS<span>WAVES</span> <em>2D</em></h1>
-    <p class="creator">Joao Leno</p>
-    <p class="subtitle">Sobreviva às hordas · evolua · funda armas · acumule gemas</p>
+    <div class="menu-header">
+      <h1 class="title">VIRUS<span>WAVES</span> <em>2D</em></h1>
+      <p class="creator">Joao Leno</p>
+      <p class="subtitle">Sobreviva às hordas · evolua · funda armas · acumule gemas</p>
+    </div>
 
     <div class="modes" id="modeList"></div>
+
+    <div class="menu-actions">
+      <button id="btnPlay" class="big-btn">▶ JOGAR</button>
+      <div class="menu-actions-row">
+        <button id="btnTut" class="big-btn alt">⌨ TUTORIAL</button>
+        <button id="btnSkins" class="big-btn alt">🧑‍🎨 SKINS</button>
+        <button id="btnChars" class="big-btn alt">🧙 PERSONAGENS</button>
+        <button id="btnShop" class="big-btn alt">💎 LOJA</button>
+        <button id="btnAcess" class="big-btn alt">♿ ACESSIBILIDADE</button>
+      </div>
+    </div>
 
     <div id="worldPanel" class="world-panel hidden"></div>
 
@@ -80,10 +103,6 @@
       </div>
     </div>
 
-    <button id="btnPlay" class="big-btn">▶ JOGAR</button>
-    <button id="btnSkins" class="big-btn alt">🧑‍🎨 SKINS</button>
-    <button id="btnChars" class="big-btn alt">🧙 PERSONAGENS</button>
-    <button id="btnShop" class="big-btn alt">💎 LOJA</button>
     <p class="hint">Mover: <b>WASD</b>/<b>Setas</b> · Pausa: <b>P</b> · Abrir baú: <b>E</b> ou encoste nele · Escolha de level-up: <b>1-4</b> — o ataque é automático<br>Limpe a sala e ande na <b>SAÍDA</b> para ir pra próxima sala. A sala de trás é apagada.<br>Pegue as <b>relíquias</b> no pedestal com a coluna de luz — elas valem a partida toda.</p>
   </section>
 
@@ -104,12 +123,106 @@
     <button id="btnShopBack" class="big-btn">◀ VOLTAR</button>
   </section>
 
+  <!-- ============ ACESSIBILIDADE ============ -->
+  <section id="acesso" class="screen hidden">
+    <h2>♿ ACESSIBILIDADE</h2>
+    <p class="subtitle">Ajuste o jogo do seu jeito. Tudo aqui é opcional e fica salvo no navegador — e <b>não</b> é apagado quando o progresso é resetado.</p>
+    <div class="acc-wrap" id="accGrid"></div>
+    <div class="acc-foot">
+      <button id="btnAccReset" class="big-btn alt">↺ VOLTAR AO PADRÃO</button>
+      <button id="btnAccBack" class="big-btn">◀ VOLTAR</button>
+    </div>
+  </section>
+
   <!-- ============ PERSONAGENS ============ -->
   <section id="chars" class="screen hidden">
     <h2>🧙 PERSONAGENS <small id="charsGems">0</small> 💎</h2>
     <p class="subtitle">Jogando, você <b>destrava</b> personagens. Depois é só <b>comprar</b> com gemas para usar. Cada personagem destrava <b>uma arma</b> a mais para a partida.</p>
     <div class="char-grid" id="charGrid"></div>
     <button id="btnCharsBack" class="big-btn">◀ VOLTAR</button>
+  </section>
+
+  <!-- ============ TUTORIAL ============ -->
+  <section id="tutorial" class="screen hidden">
+    <h2>⌨ TUTORIAL <small>COMO JOGAR</small></h2>
+    <p class="subtitle">O básico para não morrer na 1ª onda: mover, pausar, abrir baú e escolher melhorias. As armas atiram sozinhas.</p>
+
+    <div class="tut-grid">
+      <div class="tut-card">
+        <div class="tut-ico">🕹️</div>
+        <div class="tut-tit">Mover</div>
+        <div class="tut-desc">No teclado: <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> ou as <kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd>.<br>No celular: arraste o dedo na <b>metade esquerda</b> da tela para aparecer o joystick.</div>
+      </div>
+
+      <div class="tut-card star">
+        <div class="tut-ico">⚔️</div>
+        <div class="tut-tit">Atacar — é automático</div>
+        <div class="tut-desc"><b>Não existe tecla de ataque.</b> Suas armas dissozinhas e miram sozinhas no inimigo mais perto. Você só precisa <b>se mover bem</b> para as balas acertarem e para não ser cercado.</div>
+      </div>
+
+      <div class="tut-card">
+        <div class="tut-ico">⏸️</div>
+        <div class="tut-tit">Pausar</div>
+        <div class="tut-desc">Aperte <kbd>P</kbd> ou <kbd>Esc</kbd> — ou toque no botão <b>II</b> no canto superior direito do HUD.<br>Na pausa você vê o tempo, nível, abates, moedas e armas. <b>CONTINUAR</b> volta pro jogo, <b>ABANDONAR</b> sai e salva o progresso.</div>
+      </div>
+
+      <div class="tut-card">
+        <div class="tut-ico">📦</div>
+        <div class="tut-tit">Abrir o baú</div>
+        <div class="tut-desc"><kbd>E</kbd> ou simplesmente <b>encoste</b> nele e aperte ABRIR. No celular: <b>toque na metade direita</b> da tela.<br>O baú custa <b>moedas</b> e pode dar arma nova, evolução ou fusão.</div>
+      </div>
+
+      <div class="tut-card">
+        <div class="tut-ico">⬆️</div>
+        <div class="tut-tit">Subir de nível</div>
+        <div class="tut-desc">Colete as <b>💎 gemas</b> (XP) que os inimigos deixam. Ao subir, o jogo pausa sozinho e mostra 4 cartas: <b>clique</b> na que quiser ou tecle <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd>.</div>
+      </div>
+
+      <div class="tut-card">
+        <div class="tut-ico">🔮</div>
+        <div class="tut-tit">Fundir armas</div>
+        <div class="tut-desc">Duas armas <b>no nível 3</b> liberam a fusão: aparece o aviso <b>FUSÃO DISPONÍVEL</b> e uma carta dourada no próximo level-up. Fusão é bem mais forte que subir de nível.</div>
+      </div>
+
+      <div class="tut-card">
+        <div class="tut-ico">🚪</div>
+        <div class="tut-tit">Ir pra próxima sala</div>
+        <div class="tut-desc">Mate todos os inimigos até a sala ficar <b>LIMPA</b>. Aí a <b>SAÍDA</b> (portal verde na parede da direita) abre — ande até ela.<br>Cuidado: a sala de trás é <b>apagada</b>, inimigos e itens não atravessam.</div>
+      </div>
+
+      <div class="tut-card">
+        <div class="tut-ico">✨</div>
+        <div class="tut-tit">Relíquias</div>
+        <div class="tut-desc">Procure o <b>pedestal com a coluna de luz</b>. Ele dá uma relíquia que <b>vale a partida toda</b> (dano, ímã, velocidade...). Vale sair do caminho para pegar.</div>
+      </div>
+
+      <div class="tut-card">
+        <div class="tut-ico">💎</div>
+        <div class="tut-tit">Gemas e XP</div>
+        <div class="tut-desc">O <b>ímã</b> puxa as gemas pertas; a mais longe te persegue devagar. Ao <b>limpar a sala</b>, todo o XP do chão é recolhido na hora — nada se perde.</div>
+      </div>
+
+      <div class="tut-card">
+        <div class="tut-ico">🧱</div>
+        <div class="tut-tit">Parede é parede</div>
+        <div class="tut-desc">Pilares e muros <b>bloqueiam tiro</b> — o seu e o dos inimigos. Use a parede de cobertura para descansar e recarregar o sangue.</div>
+      </div>
+
+      <div class="tut-card">
+        <div class="tut-ico">❤️</div>
+        <div class="tut-tit">Sobreviver</div>
+        <div class="tut-desc">Nunca pare de andar. O <b>dano recebido</b> só cai com armadura/bônus da loja. Se a vida baixar, fuja para girar a horda e deixar as armas trabalharem.</div>
+      </div>
+
+      <div class="tut-card">
+        <div class="tut-ico">🧭</div>
+        <div class="tut-tit">O resto do menu</div>
+        <div class="tut-desc"><b>LOJA</b>: melhorias com gemas · <b>PERSONAGENS</b>: cada um dá uma arma extra · <b>SKINS</b>: visual (algumas com bônus) · <b>ACESSIBILIDADE</b>: tamanho, volume e tremor · <b>🔑 CÓDIGO</b>: digitando no menu.</div>
+      </div>
+    </div>
+
+    <p class="hint">Resumo: <b>mova-se</b> (WASD/setas) · ataque é <b>automático</b> · pause com <b>P</b> ou <b>Esc</b> · baú com <b>E</b> · level-up com <b>1-4</b></p>
+    <button id="btnTutBack" class="big-btn">◀ VOLTAR</button>
   </section>
 
   <!-- ============ LEVEL UP ============ -->
@@ -148,6 +261,7 @@
 <script src="js/audio.js"></script>
 <script src="js/sprites.js"></script>
 <script src="js/entities.js"></script>
+<script src="js/access.js"></script>
 <script src="js/mechanics.js"></script>
 <script src="js/game.js"></script>
 <script src="js/ui.js"></script>
