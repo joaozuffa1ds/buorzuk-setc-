@@ -10,6 +10,25 @@
   --xp: #63e6a0;
   --hp: #ff4d6a;
   --accent: #b14bff;
+  /* tamanho da interface (menu de acessibilidade) */
+  --ui: 1;
+}
+
+/* A interface inteira cresce e encolhe junto.
+   O zoom (e não transform) é usado de propósito: ele mexe no layout E
+   no acerto dos cliques, então os botões continuam clicáveis no lugar.
+   O width/height em calc compensam o zoom — sem eles o #app passaria da
+   borda da tela e cortaria um pedaço do menu.
+   Tudo dentro de @supports: num navegador sem zoom a opção simplesmente
+   não faz nada, em vez de espremer o menu num canto. */
+#app { position: fixed; inset: 0; }
+
+@supports (zoom: 1.3) {
+  #app {
+    zoom: var(--ui);
+    width: calc(100% / var(--ui));
+    height: calc(100% / var(--ui));
+  }
 }
 
 html, body { height: 100%; background: #05040a; overflow: hidden; }
@@ -210,6 +229,30 @@ body {
   font-size: 11px; opacity: .5;
 }
 
+/* --------- TUTORIAL OVERLAY --------- */
+#tutOverlay {
+  position: absolute; inset: 0; z-index: 60;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(5,4,12,.88); backdrop-filter: blur(4px);
+  pointer-events: auto;
+}
+.tut-box {
+  background: var(--panel); border: 2px solid var(--gold);
+  border-radius: 16px; padding: 30px 40px; max-width: 460px; width: 90%;
+  text-align: center; box-shadow: 0 0 40px rgba(255,204,77,.35);
+}
+.tut-step { font-size: 12px; letter-spacing: 2px; color: var(--gem); font-weight: bold; text-transform: uppercase; margin-bottom: 10px; }
+.tut-box h3 { font-size: 22px; margin-bottom: 10px; color: var(--gold); }
+.tut-box p { font-size: 15px; line-height: 1.6; margin-bottom: 22px; opacity: .95; }
+.tut-box b { color: var(--gold); }
+.tut-box .big-btn { width: 100%; }
+
+@media (max-width: 620px) {
+  .tut-box { padding: 20px 16px; max-width: 90vw; }
+  .tut-box h3 { font-size: 18px; }
+  .tut-box p { font-size: 13px; margin-bottom: 16px; }
+}
+
 #joy { position: absolute; left: 0; top: 0; bottom: 0; width: 55%; pointer-events: auto; }
 #joyBase {
   position: absolute; width: 120px; height: 120px; border-radius: 50%;
@@ -256,6 +299,18 @@ h2 small { font-size: .45em; color: var(--gem); vertical-align: super; }
 
 .menu-build { font-size: 12px; opacity: .8; max-width: 620px; line-height: 1.7; }
 .menu-build b { color: var(--gold); }
+
+/* --------- MENU --------- */
+.menu-header { text-align: center; margin-bottom: 10px; }
+.menu-actions { display: flex; flex-direction: column; align-items: center; gap: 12px; width: min(760px, 100%); }
+.menu-actions .big-btn { width: min(300px, 90%); }
+.menu-actions-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.menu-actions-row .big-btn.alt { width: auto; flex: 1 1 130px; max-width: 170px; text-align: center; }
+
+@media (max-width: 620px) {
+  .menu-actions .big-btn { width: 100%; }
+  .menu-actions-row .big-btn.alt { flex: 1 1 45%; max-width: none; font-size: 14px; padding: 8px 10px; }
+}
 
 .big-btn {
   cursor: pointer; font-family: inherit; font-size: 20px; font-weight: bold; letter-spacing: 1px;
@@ -378,6 +433,56 @@ h2 small { font-size: .45em; color: var(--gem); vertical-align: super; }
 .char.locked .ch-ico { filter: grayscale(.85); }
 .char .buy { margin-top: 2px; }
 
+/* --------- ACESSIBILIDADE --------- */
+.acc-wrap { width: min(760px, 100%); display: flex; flex-direction: column; gap: 14px; }
+.acc-grupo {
+  background: rgba(255,255,255,.035); border: 2px solid var(--line);
+  border-radius: 16px; padding: 12px 14px; text-align: left;
+}
+.acc-grupo h3 {
+  font-size: 12px; letter-spacing: 2px; color: var(--gold);
+  margin-bottom: 8px; font-weight: bold;
+}
+.acc-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 0; border-top: 1px solid rgba(255,255,255,.06);
+}
+.acc-row:first-of-type { border-top: none; }
+.acc-txt { flex: 1; min-width: 0; }
+.acc-nome { font-weight: bold; font-size: 15px; }
+.acc-desc { font-size: 11px; opacity: .65; line-height: 1.5; margin-top: 2px; }
+.acc-ctl { flex: 0 0 auto; display: flex; align-items: center; gap: 8px; }
+
+.acc-seg { display: flex; border: 2px solid var(--line); border-radius: 10px; overflow: hidden; }
+.acc-seg-b {
+  cursor: pointer; font-family: inherit; font-size: 12px; font-weight: bold;
+  padding: 7px 11px; background: transparent; color: var(--txt);
+  border: none; border-left: 1px solid var(--line); transition: background .12s;
+}
+.acc-seg-b:first-child { border-left: none; }
+.acc-seg-b:hover { background: rgba(177,75,255,.18); }
+.acc-seg-b.on { background: var(--gold); color: #2b1a00; }
+
+.acc-btn {
+  cursor: pointer; font-family: inherit; font-size: 13px; font-weight: bold;
+  min-width: 108px; padding: 8px 12px; border-radius: 10px;
+  background: rgba(0,0,0,.5); color: var(--txt); border: 2px solid var(--line);
+  transition: background .12s, border-color .12s;
+}
+.acc-btn:hover { border-color: var(--accent); }
+.acc-btn.on { background: rgba(99,230,160,.22); border-color: var(--xp); color: var(--xp); }
+
+.acc-range { width: 130px; accent-color: var(--gold); cursor: pointer; }
+.acc-val { font-size: 13px; font-weight: bold; color: var(--gold); min-width: 44px; text-align: right; }
+
+.acc-foot { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 4px; }
+
+@media (max-width: 620px) {
+  .acc-row { flex-direction: column; align-items: stretch; gap: 8px; }
+  .acc-ctl { justify-content: flex-start; }
+  .acc-range { flex: 1; width: auto; }
+}
+
 /* --------- CÓDIGO --------- */
 .codebox {
   width: min(420px, 100%); text-align: left;
@@ -401,4 +506,39 @@ h2 small { font-size: .45em; color: var(--gem); vertical-align: super; }
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-6px); }
   75% { transform: translateX(6px); }
+}
+
+/* --------- TUTORIAL --------- */
+.tut-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 10px; width: min(1040px, 100%);
+}
+.tut-card {
+  display: grid; grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas: "ico tit" "ico desc";
+  column-gap: 10px; row-gap: 4px; align-items: start;
+  text-align: left; background: var(--panel);
+  border: 2px solid var(--line); border-radius: 14px; padding: 12px;
+}
+.tut-card.star {
+  border-color: var(--gold);
+  background: linear-gradient(180deg, rgba(255,204,77,.13), var(--panel));
+  box-shadow: 0 0 20px rgba(255,204,77,.18);
+}
+.tut-ico { grid-area: ico; font-size: 26px; line-height: 1.1; }
+.tut-tit { grid-area: tit; font-weight: bold; font-size: 14px; letter-spacing: 1px; }
+.tut-card.star .tut-tit { color: var(--gold); }
+.tut-desc { grid-area: desc; font-size: 11.5px; opacity: .78; line-height: 1.55; }
+.tut-desc b { color: var(--gold); }
+
+.tut-card kbd {
+  display: inline-block; min-width: 18px; text-align: center;
+  font-family: "Consolas", "Courier New", monospace; font-size: 10.5px; font-weight: bold;
+  background: rgba(0,0,0,.55); color: #ffd97a;
+  border: 1px solid var(--line); border-bottom-width: 3px; border-radius: 6px;
+  padding: 1px 5px; margin: 0 1px;
+}
+
+@media (max-width: 620px) {
+  .tut-grid { grid-template-columns: 1fr; }
 }
